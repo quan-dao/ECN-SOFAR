@@ -1,0 +1,8 @@
+<launch>
+	<node pkg="baxter_lab3" type="target_pose_broadcaster" name="target_pose_broadcaster" output="screen">
+	</node>
+	
+	<node pkg="baxter_lab3" type="left_arm_mover" name="left_arm_mover" output="screen">
+	</node>
+
+</launch>
