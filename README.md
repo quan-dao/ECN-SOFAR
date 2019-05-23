@@ -12,9 +12,7 @@ This lab's goal to program Baxter's left arm in such a way that it follow the ri
 To implement this, a `ROS Node` is written to subscribe to right hand's joints position and infer the position of the associate joints of left hand. The code of this is stored in *baxter_puppet_arm* folder
 
 The result of this lab is shown in the video below.
-<figure class="video_container">
-  <iframe src="https://www.youtube.com/watch?v=0cLE0i6XuB4" frameborder="0" allowfullscreen="true"> </iframe>
-</figure>
+[![IMAGE ALT TEXT HERE](https://www.youtube.com/watch?v=0cLE0i6XuB4)](https://www.youtube.com/watch?v=0cLE0i6XuB4)
 
 # Lab 3 - Puppet Arm
 
@@ -29,6 +27,4 @@ To achieve that target, 2 nodes are written. One node uses `tf.TransformBroadcas
 Another node use `tf.TransformListener` to retrieve the left end-effector target pose. This node also calls the Baxter Inverse Kinematic service (defined in `baxter_common` package) to find the joints position which can help the left end-effector reach its target pose.
 
 The code of this is stored in *baxter_puppet_arm_2* folder. The result of this lab is shown in the video below.
-<figure class="video_container">
-  <iframe src="https://www.youtube.com/watch?v=dxpa21cINzo" frameborder="0" allowfullscreen="true"> </iframe>
-</figure>
+[![IMAGE ALT TEXT HERE](https://www.youtube.com/watch?v=dxpa21cINzo)](https://www.youtube.com/watch?v=dxpa21cINzo)
