@@ -1,32 +1,40 @@
-# Intro
-This repository contains my implementation of 4 lab sessions of the subject Software Architect for Robots at Ecole Centrale de Nantes. These labs are designed to be a medium for students to learn the basis of ROS. The subject of this lab is to program the Baxter robot so that it will operate according to some predefined manner.
+# Software Architecture for Robots (SOFAR @ ECN
+This repository contains my implementation of lab sessions of the subject Software Architect for Robots at Ecole Centrale de Nantes. These labs are designed to be a medium for students to learn the basis of *ROS*. The subject of this lab is to program the Baxter robot so that one arm is manually controlled while the other arm follows it in a predefine manner.
 
-# Lab 2 - Puppet Arm
+## Lab 2 - Symmetrical Follower
 
-Learning points:
-* ROS Node
-* Publish and Subscrib to topics
+This lab's goal to program Baxter's left arm in such a way that it follow the right arm symmetrically as in the figure below.
 
-This lab's goal to program Baxter's left arm in such a way that it follow the right arm symmetrically. In detail, an operator will move Baxter's right hand, and the program has to make left arm follow that motion so that left arm is symmetric to right arm with respect to Baxter's sagittal plane.
+![alt text](./img/Baxter_puppet_arm.gif)
 
-To implement this, a `ROS Node` is written to subscribe to right hand's joints position and infer the position of the associate joints of left hand. The code of this is stored in *baxter_puppet_arm* folder
+The package of this for lab is located in `./baxter_puppet_arm`. To build this, it's essential to have the package [baxter_core_msgs](https://github.com/RethinkRobotics/baxter_common/tree/master/baxter_core_msgs)
 
-The result of this lab is shown in the video below.
+To start controlling the robot, make sure Baxter robot is up and running, then launch either the node `slave_arm_node` or `slave_arm_node_velocity`
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/0cLE0i6XuB4/0.jpg)](https://www.youtube.com/watch?v=0cLE0i6XuB4)
+```
+$ rosrun baxter_puppet_arm slave_arm_node
+```
 
-# Lab 3 - Puppet Arm
+This node subscribes to right hand's joints position and infer the position of the associate joints of left hand then publishes the joint position to `/robot/limb/left/joint_command` topic.
 
-Learning points:
-* TF package (use broadcaster & listener)
-* ROS Service
+## Lab 3 - Constant Distance Follower
 
-Similar to lab 2, this lab attempts to control Baxter's left hand in accordance with the motion of its right hand. However, the left hand needs to move so that the end-effector frame of left hand remains a certain distance from right hand end-effector frame, and left end-effector's z-axis is in reverse direction of right end-effector z-axis.
+In this lab, the program-controlled left arm is moved such that the end-effector frame of left hand remains a certain distance from right hand end-effector frame, and left end-effector's z-axis is in reverse direction of right end-effector z-axis. 
 
-To achieve that target, 2 nodes are written. One node uses `tf.TransformBroadcaster` to publish the target pose for left hand end-effector. 
+![alt text](./img/Baxter_puppet_arm_2.gif)
 
-Another node use `tf.TransformListener` to retrieve the left end-effector target pose. This node also calls the Baxter Inverse Kinematic service (defined in `baxter_common` package) to find the joints position which can help the left end-effector reach its target pose.
+Similar to lab 2, to build lab 3's package (located in `./baxter_puppet_arm_2`), the `baxter_core_msgs` package is required.
 
-The code of this is stored in *baxter_puppet_arm_2* folder. The result of this lab is shown in the video below.
+To start controlling the robot, use the launch file `lab3.launch` after Baxter robot is up
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/dxpa21cINzo/0.jpg)](https://www.youtube.com/watch?v=dxpa21cINzo)
+```
+$ roslaunch baxter_puppet_arm_2 lab3.launch
+```
+
+This launch file spins up 2 nodes 
+
+* target_pose_broadcaster node
+  - Construct the target pose for left hand end-effector from the end-effector's frame of the right hand and publish it uisng `tf.TransformBroadcaster`
+
+* left_arm_mover node 
+  - calls the Baxter Inverse Kinematic service to find the left arm's joints position which move the left end-effector to the target pose published above
